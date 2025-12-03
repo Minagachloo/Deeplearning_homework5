@@ -1,14 +1,6 @@
 import torch
 from denoising_diffusion_pytorch import Unet, GaussianDiffusion, Trainer
 
-"""
-DDPM Training on CIFAR-10 - FIXED VERSION
-- Fixed image_size to 32 (CIFAR-10 size)
-- Disabled flash_attn (kernel compatibility issue)
-- Disabled amp (dtype issues)
-- 50,000 training steps
-"""
-
 # Model - flash_attn MUST be False to avoid kernel error
 model = Unet(
     dim = 64,
@@ -28,14 +20,14 @@ diffusion = GaussianDiffusion(
 trainer = Trainer(
     diffusion,
     './cifar10_images',
-    train_batch_size = 64,            # A100 can handle 64
-    train_lr = 2e-4,                  # DDPM paper learning rate
-    train_num_steps = 50000,          # Your target: 50k steps
+    train_batch_size = 64,           
+    train_lr = 2e-4,               
+    train_num_steps = 50000,          
     gradient_accumulate_every = 1,
     ema_decay = 0.9999,
-    amp = False,                      # FIXED: was True, caused dtype error
+    amp = False,                    
     calculate_fid = True,
-    save_and_sample_every = 5000,     # Save every 5k steps
+    save_and_sample_every = 5000,    
     results_folder = './results_50k'
 )
 
